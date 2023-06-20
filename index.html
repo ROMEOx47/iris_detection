@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Iris Flower Classification</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f7f7f7;
+    }
+
+    .container {
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      background-color: #fff;
+      animation: zoomIn 0.5s ease-in-out;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #555;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+      color: #666;
+      font-weight: bold;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      transition: border-color 0.3s ease;
+    }
+
+    input[type="text"]:focus {
+      outline: none;
+      border-color: #4CAF50;
+    }
+
+    button {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    #result {
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #f2f2f2;
+      border-radius: 3px;
+      font-weight: bold;
+      color: #666;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes zoomIn {
+      0% {
+        transform: scale(0);
+        opacity: 0;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Iris Flower Classification</h2>
+    <form id="flower-form">
+      <label for="sepal-length">Sepal Length:</label>
+      <input type="text" id="sepal-length" required>
+      <label for="sepal-width">Sepal Width:</label>
+      <input type="text" id="sepal-width" required>
+      <label for="petal-length">Petal Length:</label>
+      <input type="text" id="petal-length" required>
+      <label for="petal-width">Petal Width:</label>
+      <input type="text" id="petal-width" required>
+      <button type="submit">Classify</button>
+    </form>
+
+    <div id="result"></div>
+  </div>
+
+  <script>
+    var flowerForm = document.getElementById('flower-form');
+    flowerForm.addEventListener('submit', function(event) {
+      event.preventDefault();
+      var sepalLength = parseFloat(document.getElementById('sepal-length').value);
+      var sepalWidth = parseFloat(document.getElementById('sepal-width').value);
+      var petalLength = parseFloat(document.getElementById('petal-length').value);
+      var petalWidth = parseFloat(document.getElementById('petal-width').value);
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', '/classify', true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          var result = JSON.parse(xhr.responseText);
+          document.getElementById('result').innerText = 'Predicted class: ' + result.predicted_class;
+        }
+      };
+
+      xhr.send(JSON.stringify({
+        sepal_length: sepalLength,
+        sepal_width: sepalWidth,
+        petal_length: petalLength,
+        petal_width: petalWidth
+      }));
+    });
+  </script>
+</body>
+</html>
